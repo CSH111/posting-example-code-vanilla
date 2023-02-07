@@ -1,31 +1,45 @@
-// 잘못됨!
-
-const numberElem = document.querySelector(".number");
+const firstNumberElem = document.querySelector(".number");
 const secondNumberElem = document.querySelector(".second-number");
 const buttonElem = document.querySelector(".add-button");
-
-let timeoutID;
-
-function throttle(fn, time) {
-  if (timeoutID) return;
-  timeoutID = setTimeout(() => {
-    fn();
-    timeoutID = null;
-  }, time);
-}
 
 function add(elem) {
   elem.innerText++;
 }
 
-function handleFirstNumberClick() {
-  throttle(() => add(numberElem), 500);
+function createThrottle() {
+  const timeoutRef = { id: null };
+  const throttle = (fn, timeout = 500) => {
+    if (timeoutRef.id) {
+      return;
+    }
+    fn();
+    timeoutRef.id = setTimeout(() => {
+      timeoutRef.id = null;
+    }, timeout);
+  };
+
+  return throttle;
 }
+
+const firstThrottle = createThrottle();
+
+function handleFirstNumberClick() {
+  firstThrottle(() => add(firstNumberElem));
+}
+
+const secondThrottle = createThrottle();
 
 function handleSecondNumberClick() {
-  throttle(() => add(secondNumberElem), 500);
+  secondThrottle(() => add(secondNumberElem));
 }
 
-// 두번째 이벤트가 작동하지 않는다.
-buttonElem.addEventListener("click", handleFirstNumberClick);
-buttonElem.addEventListener("click", handleSecondNumberClick);
+function initFirstNumberClickEvent() {
+  buttonElem.addEventListener("click", handleFirstNumberClick);
+}
+
+function initSecondNumberClickEvent() {
+  buttonElem.addEventListener("click", handleSecondNumberClick);
+}
+
+initFirstNumberClickEvent();
+initSecondNumberClickEvent();
