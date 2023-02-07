@@ -1,12 +1,28 @@
 const numberElem = document.querySelector(".number");
+const secondNumberElem = document.querySelector(".second-number");
 const buttonElem = document.querySelector(".add-button");
 
-let timer;
+let timeoutID;
 
-buttonElem.addEventListener("click", () => {
-  if (timer) return;
-  timer = setTimeout(() => {
-    numberElem.innerText++;
-    timer = null;
-  }, 500);
-});
+function throttle(fn, time) {
+  if (timeoutID) return;
+  timeoutID = setTimeout(() => {
+    fn();
+    timeoutID = null;
+  }, time);
+}
+
+function add(elem) {
+  elem.innerText++;
+}
+
+function handleFirstNumberClick() {
+  throttle(() => add(numberElem), 500);
+}
+
+function handleSecondNumberClick() {
+  throttle(() => add(secondNumberElem), 500);
+}
+
+buttonElem.addEventListener("click", handleFirstNumberClick);
+buttonElem.addEventListener("click", handleSecondNumberClick);
