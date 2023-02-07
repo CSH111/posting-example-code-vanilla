@@ -1,5 +1,4 @@
-const firstNumberElem = document.querySelector(".number");
-const secondNumberElem = document.querySelector(".second-number");
+const numberElem = document.querySelector(".number");
 const buttonElem = document.querySelector(".add-button");
 
 function add(elem) {
@@ -21,25 +20,14 @@ function createThrottle() {
   return throttle;
 }
 
-const firstThrottle = createThrottle();
+const throttle = createThrottle();
 
 function handleFirstNumberClick() {
-  firstThrottle(() => add(firstNumberElem));
-}
-
-const secondThrottle = createThrottle();
-
-function handleSecondNumberClick() {
-  secondThrottle(() => add(secondNumberElem));
+  throttle(() => add(numberElem));
 }
 
 function initFirstNumberClickEvent() {
   buttonElem.addEventListener("click", handleFirstNumberClick);
 }
 
-function initSecondNumberClickEvent() {
-  buttonElem.addEventListener("click", handleSecondNumberClick);
-}
-
 initFirstNumberClickEvent();
-initSecondNumberClickEvent();
